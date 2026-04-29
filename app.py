@@ -2,10 +2,36 @@ import streamlit as st
 import pickle
 import pandas as pd
 from src.recommender import recommend
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+@st.cache_data
+def compute_similarity(data):
+
+    # 🔥 FIX: handle missing values FIRST
+    features = ['genres', 'keywords', 'tagline', 'cast', 'director']
+    
+    for feature in features:
+        data[feature] = data[feature].fillna('')
+
+    # Combine features
+    combined_features = (
+        data['genres'] + " " +
+        data['keywords'] + " " +
+        data['tagline'] + " " +
+        data['cast'] + " " +
+        data['director']
+    )
+
+    # Vectorization
+    vectorizer = TfidfVectorizer()
+    feature_vectors = vectorizer.fit_transform(combined_features)
+
+    return cosine_similarity(feature_vectors)
 
 # Load data
 data = pd.read_csv('data/movies.csv')
-similarity = pickle.load(open('models/similarity.pkl', 'rb'))
+similarity = compute_similarity(data)
 
 st.title("🎬 Movie Recommendation System")
 
