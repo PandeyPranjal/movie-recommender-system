@@ -31,7 +31,7 @@ A content-based movie recommendation system that suggests similar movies based o
 ## ▶️ Run Locally
 
 ```bash
-git clone https://github.com/pranjalpandey007/movie-recommender-system.git
+git clone https://github.com/pandeypranjal/movie-recommender-system.git
 cd movie-recommender-system
 pip install -r requirements.txt
 streamlit run app.py
